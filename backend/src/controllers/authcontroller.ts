@@ -1,8 +1,6 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../lib/prisma';                    // ← New import
 import { hashPassword, comparePassword, generateToken } from '../utils/auth';
-
-const prisma = new PrismaClient();
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -30,7 +28,8 @@ export const register = async (req: Request, res: Response) => {
       token,
       user: { id: user.id, email: user.email, name: user.name, role: user.role }
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error(error);
     res.status(500).json({ error: 'Registration failed' });
   }
 };
@@ -56,7 +55,8 @@ export const login = async (req: Request, res: Response) => {
       token,
       user: { id: user.id, email: user.email, name: user.name, role: user.role }
     });
-  } catch (error) {
+  } catch (error: any) {
+    console.error(error);
     res.status(500).json({ error: 'Login failed' });
   }
 };
